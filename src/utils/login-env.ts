@@ -1,4 +1,5 @@
 import { execFile } from 'node:child_process';
+import { existsSync } from 'node:fs';
 
 /**
  * Login-shell environment, resolved once per shell and reused for every command.
@@ -33,22 +34,31 @@ export function loginEnvironment(executable: string): Promise<NodeJS.ProcessEnv 
 }
 
 function capture(executable: string): Promise<NodeJS.ProcessEnv | null> {
-    // Node prints the environment as JSON between markers, so anything the profile itself prints is ignored.
-    const node = `'${process.execPath.replace(/'/g, `'\\''`)}'`;
-    const script = `${node} -e 'process.stdout.write("${MARK}" + JSON.stringify(process.env) + "${MARK}")'`;
+    // /usr/bin/env -0 prints the environment the profile produced, NUL separated, between markers,
+    // so anything the profile itself prints is ignored. It does not depend on which Node runs
+    // Kilnshell: inside Claude Desktop, process.execPath is Claude's helper app, not a node binary,
+    // and the previous `node -e` capture silently failed there (every command paid the profile).
+    const envBin = ['/usr/bin/env', '/bin/env'].find((p) => existsSync(p)) ?? 'env';
+    const script = `printf '%s' ${MARK}; ${envBin} -0; printf '%s' ${MARK}`;
     return new Promise((resolve) => {
         execFile(executable, ['-l', '-c', script], { timeout: 10000, maxBuffer: 8 * 1024 * 1024, env: process.env }, (error, stdout) => {
             if (error) return resolve(null);
             const start = stdout.indexOf(MARK);
             const end = stdout.lastIndexOf(MARK);
             if (start === -1 || end <= start) return resolve(null);
-            try {
-                const env = JSON.parse(stdout.slice(start + MARK.length, end)) as NodeJS.ProcessEnv;
-                for (const key of SHELL_LOCAL) delete env[key];
-                resolve(env);
-            } catch {
-                resolve(null);
+            const env: NodeJS.ProcessEnv = {};
+            for (const entry of stdout.slice(start + MARK.length, end).split('\0')) {
+                const eq = entry.indexOf('=');
+                if (eq > 0) env[entry.slice(0, eq)] = entry.slice(eq + 1);
             }
+            if (!env.PATH) return resolve(null);
+            for (const key of SHELL_LOCAL) delete env[key];
+            // Variables of the host app (Claude Desktop runs Kilnshell in its own Node) must not
+            // reach the user's commands: ELECTRON_RUN_AS_NODE would turn every Electron app into Node.
+            for (const key of Object.keys(env)) {
+                if (key.startsWith('ELECTRON_') || key === 'NODE_OPTIONS' || key.startsWith('CHROME_')) delete env[key];
+            }
+            resolve(env);
         });
     });
 }

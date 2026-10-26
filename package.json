@@ -1,6 +1,6 @@
 {
   "name": "kilnshell",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "The fastest local machine MCP server: shell, files, search, processes, PDF, Excel and Word for AI agents. A performance-focused, telemetry-free clone of Desktop Commander.",
   "license": "MIT",
   "author": "Soflution Ltd",

@@ -2,7 +2,7 @@
   "name": "kilnshell",
   "displayName": "Kilnshell",
   "description": "Fast, telemetry-free local MCP server: shell, files, search, processes, PDF, Excel and Word for Claude.",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "author": {
     "name": "Soflution Ltd",
     "email": "contact@soflution.com",
