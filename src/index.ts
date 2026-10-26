@@ -137,8 +137,9 @@ async function runServer() {
       transport.sendLog('info', 'Server connected successfully');
       transport.sendLog('info', 'MCP fully initialized, all startup messages sent');
 
-      // Preemptively check/download Chrome for PDF generation (runs in background)
-      ensureChromeAvailable();
+      // Chrome (about 150 MB) is only needed to write PDFs: it is fetched on the first write_pdf.
+      // KILNSHELL_PREFETCH_CHROME=1 fetches it in the background at startup instead.
+      if (process.env.KILNSHELL_PREFETCH_CHROME === '1') ensureChromeAvailable();
 
       // Load the Excel, DOCX and PDF packages, one at a time, now that initialize
       // has been answered; until then the calls that need them answer at once
