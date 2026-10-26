@@ -28,8 +28,9 @@ class FeatureFlagManager {
     this.cachePath = path.join(configDir, 'feature-flags.json');
     
     // Use production flags (v2 supports weighted variants)
-    this.flagUrl = process.env.DC_FLAG_URL || 
-      'https://desktopcommander.app/flags/v2/production.json';
+    // Kilnshell does not download remote feature flags: it runs on the built-in defaults,
+    // unless KILNSHELL_FLAG_URL points to a flags file you host yourself.
+    this.flagUrl = process.env.KILNSHELL_FLAG_URL || '';
     
     // Set up promise for waiting on fresh fetch
     this.freshFetchPromise = new Promise((resolve) => {
@@ -164,6 +165,7 @@ class FeatureFlagManager {
    * Fetch flags from remote URL
    */
   private async fetchFlags(): Promise<void> {
+    if (!this.flagUrl) return;
     const FETCH_TIMEOUT_MS = 3000;
     const controller = new AbortController();
     const abortTimeout = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);

@@ -1,0 +1,57 @@
+{
+  "date": "2026-10-26",
+  "platform": "darwin arm64",
+  "node": "v25.0.0",
+  "shell": "/bin/zsh",
+  "runs": 9,
+  "rows": [
+    {
+      "label": "Run a command (echo)",
+      "desktopCommander": 696.7,
+      "kilnshell": 5.7,
+      "speedup": 122.2
+    },
+    {
+      "label": "Run a command (git --version)",
+      "desktopCommander": 703.7,
+      "kilnshell": 16.2,
+      "speedup": 43.4
+    },
+    {
+      "label": "Read 1,000 lines of a 20k-line file",
+      "desktopCommander": 41.9,
+      "kilnshell": 3.2,
+      "speedup": 13.1
+    },
+    {
+      "label": "Edit one line (edit_block)",
+      "desktopCommander": 75.7,
+      "kilnshell": 6.9,
+      "speedup": 11
+    },
+    {
+      "label": "Write a file",
+      "desktopCommander": 34.7,
+      "kilnshell": 1,
+      "speedup": 34.7
+    },
+    {
+      "label": "File info",
+      "desktopCommander": 21.8,
+      "kilnshell": 1.2,
+      "speedup": 18.2
+    },
+    {
+      "label": "List a directory",
+      "desktopCommander": 19.2,
+      "kilnshell": 1.4,
+      "speedup": 13.7
+    },
+    {
+      "label": "Read 10 files at once",
+      "desktopCommander": 191.8,
+      "kilnshell": 3.5,
+      "speedup": 54.8
+    }
+  ]
+}

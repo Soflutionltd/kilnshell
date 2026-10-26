@@ -39,7 +39,9 @@ async function runServer() {
 
     // Check if first argument is "remote"
     if (process.argv[2] === 'remote') {
-      await runRemote();
+      // The remote device mode relies on the Desktop Commander cloud service, which Kilnshell does not use.
+      process.stderr.write('kilnshell: the "remote" mode of Desktop Commander is not available in Kilnshell.\n');
+      process.exitCode = 1;
       return;
     }
 
@@ -157,7 +159,7 @@ async function runServer() {
       method: "notifications/message",
       params: {
         level: "error",
-        logger: "desktop-commander",
+        logger: "kilnshell",
         data: `Failed to start server: ${errorMessage} (${new Date().toISOString()})`
       }
     };

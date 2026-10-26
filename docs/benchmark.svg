@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="494" viewBox="0 0 900 494" font-family="Inter, -apple-system, Segoe UI, Helvetica, Arial, sans-serif">
+  <rect width="900" height="494" rx="18" fill="#0E1116"/>
+  <text x="32" y="42" font-size="22" font-weight="800" fill="#E8ECF2">Median time per tool call, relative to Desktop Commander</text>
+  <rect x="32" y="58" width="12" height="12" rx="3" fill="#3A4354"/><text x="50" y="68" font-size="13" fill="#8B95A7">Desktop Commander 0.3.1</text>
+  <rect x="220" y="58" width="12" height="12" rx="3" fill="#FF6A1A"/><text x="238" y="68" font-size="13" fill="#C9D1DC">Kilnshell</text>
+  <text x="868" y="68" text-anchor="end" font-size="12" fill="#5B6577">darwin arm64, zsh login profile, 2026-10-26</text>
+  <text x="286" y="105" text-anchor="end" font-size="14" fill="#C9D1DC">Run a command (echo)</text>
+  <rect x="300" y="86" width="480" height="15" rx="4" fill="#3A4354"/>
+  <text x="788" y="98" font-size="12" fill="#8B95A7">696.7 ms</text>
+  <rect x="300" y="104" width="3.9270848284771063" height="15" rx="4" fill="#FF6A1A"/>
+  <text x="311.9270848284771" y="116" font-size="12" font-weight="700" fill="#FF8A3D">5.7 ms  ·  122.2x</text>
+  <text x="286" y="151" text-anchor="end" font-size="14" fill="#C9D1DC">Run a command (git --version)</text>
+  <rect x="300" y="132" width="480" height="15" rx="4" fill="#3A4354"/>
+  <text x="788" y="144" font-size="12" fill="#8B95A7">703.7 ms</text>
+  <rect x="300" y="150" width="11.050163421912746" height="15" rx="4" fill="#FF6A1A"/>
+  <text x="319.05016342191277" y="162" font-size="12" font-weight="700" fill="#FF8A3D">16.2 ms  ·  43.4x</text>
+  <text x="286" y="197" text-anchor="end" font-size="14" fill="#C9D1DC">Read 1,000 lines of a 20k-line file</text>
+  <rect x="300" y="178" width="480" height="15" rx="4" fill="#3A4354"/>
+  <text x="788" y="190" font-size="12" fill="#8B95A7">41.9 ms</text>
+  <rect x="300" y="196" width="36.65871121718377" height="15" rx="4" fill="#FF6A1A"/>
+  <text x="344.6587112171838" y="208" font-size="12" font-weight="700" fill="#FF8A3D">3.2 ms  ·  13.1x</text>
+  <text x="286" y="243" text-anchor="end" font-size="14" fill="#C9D1DC">Edit one line (edit_block)</text>
+  <rect x="300" y="224" width="480" height="15" rx="4" fill="#3A4354"/>
+  <text x="788" y="236" font-size="12" fill="#8B95A7">75.7 ms</text>
+  <rect x="300" y="242" width="43.751651254953764" height="15" rx="4" fill="#FF6A1A"/>
+  <text x="351.75165125495374" y="254" font-size="12" font-weight="700" fill="#FF8A3D">6.9 ms  ·  11x</text>
+  <text x="286" y="289" text-anchor="end" font-size="14" fill="#C9D1DC">Write a file</text>
+  <rect x="300" y="270" width="480" height="15" rx="4" fill="#3A4354"/>
+  <text x="788" y="282" font-size="12" fill="#8B95A7">34.7 ms</text>
+  <rect x="300" y="288" width="13.832853025936599" height="15" rx="4" fill="#FF6A1A"/>
+  <text x="321.8328530259366" y="300" font-size="12" font-weight="700" fill="#FF8A3D">1 ms  ·  34.7x</text>
+  <text x="286" y="335" text-anchor="end" font-size="14" fill="#C9D1DC">File info</text>
+  <rect x="300" y="316" width="480" height="15" rx="4" fill="#3A4354"/>
+  <text x="788" y="328" font-size="12" fill="#8B95A7">21.8 ms</text>
+  <rect x="300" y="334" width="26.42201834862385" height="15" rx="4" fill="#FF6A1A"/>
+  <text x="334.42201834862385" y="346" font-size="12" font-weight="700" fill="#FF8A3D">1.2 ms  ·  18.2x</text>
+  <text x="286" y="381" text-anchor="end" font-size="14" fill="#C9D1DC">List a directory</text>
+  <rect x="300" y="362" width="480" height="15" rx="4" fill="#3A4354"/>
+  <text x="788" y="374" font-size="12" fill="#8B95A7">19.2 ms</text>
+  <rect x="300" y="380" width="35" height="15" rx="4" fill="#FF6A1A"/>
+  <text x="343" y="392" font-size="12" font-weight="700" fill="#FF8A3D">1.4 ms  ·  13.7x</text>
+  <text x="286" y="427" text-anchor="end" font-size="14" fill="#C9D1DC">Read 10 files at once</text>
+  <rect x="300" y="408" width="480" height="15" rx="4" fill="#3A4354"/>
+  <text x="788" y="420" font-size="12" fill="#8B95A7">191.8 ms</text>
+  <rect x="300" y="426" width="8.75912408759124" height="15" rx="4" fill="#FF6A1A"/>
+  <text x="316.75912408759126" y="438" font-size="12" font-weight="700" fill="#FF8A3D">3.5 ms  ·  54.8x</text>
+</svg>

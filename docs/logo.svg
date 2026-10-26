@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="560" height="140" viewBox="0 0 560 140" font-family="Inter, -apple-system, Segoe UI, Helvetica, Arial, sans-serif">
+  <defs>
+    <linearGradient id="fire" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0" stop-color="#FF3D00"/>
+      <stop offset="0.6" stop-color="#FF8A00"/>
+      <stop offset="1" stop-color="#FFD24A"/>
+    </linearGradient>
+  </defs>
+  <rect x="8" y="10" width="120" height="120" rx="30" fill="#0E1116"/>
+  <!-- kiln arch -->
+  <path d="M30 112 V70 a38 38 0 0 1 76 0 V112" fill="none" stroke="#3A4354" stroke-width="9" stroke-linecap="round"/>
+  <!-- prompt and flame inside -->
+  <path d="M44 84 L58 94 L44 104" fill="none" stroke="#8B95A7" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M82 106 c-14 0 -18 -12 -12 -22 c3 6 7 7 8 4 c-2 -9 3 -18 10 -22 c-1 7 4 11 7 16 c4 7 3 24 -13 24 z" fill="url(#fire)"/>
+  <text x="150" y="88" font-size="64" font-weight="800" letter-spacing="-1.5" fill="#FF6A1A">Kiln<tspan fill="#8B95A7">shell</tspan></text>
+</svg>

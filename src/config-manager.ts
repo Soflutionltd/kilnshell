@@ -94,7 +94,7 @@ function migrateLegacyConfig(config: ServerConfig): void {
  */
 function warnUser(message: string): void {
   console.warn(message);
-  process.stderr.write(`[WARNING] Desktop Commander: ${message}\n`);
+  process.stderr.write(`[WARNING] Kilnshell: ${message}\n`);
 }
 
 function messageOf(error: unknown): string {
@@ -182,13 +182,13 @@ class ConfigManager {
           // Left as it is, the next start recovers it
           const text = await fs.readFile(this.configPath, 'utf8').catch(() => '');
           return this.startWithoutSaving(buildRecoveredConfig(this.getDefaultConfig(), null, text),
-            `config.json could not be parsed, and replacing it failed (${messageOf(recoveryError)}). For this session Desktop Commander uses the settings still readable in it and the defaults for the rest; config.json is left as it is.`);
+            `config.json could not be parsed, and replacing it failed (${messageOf(recoveryError)}). For this session Kilnshell uses the settings still readable in it and the defaults for the rest; config.json is left as it is.`);
         }
       } else {
         // There, but it can't be read (e.g. no permission): an existing install,
         // so the welcome page stays off, and initialize has nothing to save for it
         return this.startWithoutSaving(buildRecoveredConfig(this.getDefaultConfig(), null, ''),
-          `config.json could not be read (${messageOf(error)}). For this session Desktop Commander uses the default settings; config.json is left as it is.`);
+          `config.json could not be read (${messageOf(error)}). For this session Kilnshell uses the default settings; config.json is left as it is.`);
       }
     }
 
@@ -200,7 +200,7 @@ class ConfigManager {
         migrateLegacyConfig(config);
         this.pendingMutations.push(migrateLegacyConfig);
         return this.startWithoutSaving(config, `config.json was read, but saving to it failed (${messageOf(error)}). ` +
-          `Desktop Commander uses the settings it read; changes to them can't be saved until config.json is writable.`);
+          `Kilnshell uses the settings it read; changes to them can't be saved until config.json is writable.`);
       }
     }
     return config;
@@ -612,7 +612,7 @@ class ConfigManager {
   /**
    * Atomically update one value without blocking the caller on persistence.
    * The updater is replayed against the latest disk value under the lock, which
-   * makes counter-style updates safe across multiple Desktop Commander processes.
+   * makes counter-style updates safe across multiple Kilnshell processes.
    */
   async updateValueNonBlocking(key: string, updater: (current: any) => any): Promise<any> {
     await this.init();

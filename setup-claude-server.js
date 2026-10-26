@@ -207,30 +207,8 @@ function detectShell() {
 
 // Function to get the package spec that was used to run this script
 function getPackageSpec(versionArg = null) {
-  // If explicit version/tag argument provided, use it
-  // Usage: npx @wonderwhy-er/desktop-commander setup alpha
-  if (versionArg) {
-    return `@wonderwhy-er/desktop-commander@${versionArg}`;
-  }
-  
-  // Check if running via npx - look for the package spec in process.argv
-  // e.g., npx @wonderwhy-er/desktop-commander@0.2.18-alpha setup
-  const argv = process.argv;
-  
-  // Look for the package name in argv
-  for (let i = 0; i < argv.length; i++) {
-    const arg = argv[i];
-    if (arg.includes('@wonderwhy-er/desktop-commander')) {
-      // Extract just the package spec (e.g., @wonderwhy-er/desktop-commander@0.2.18-alpha)
-      const match = arg.match(/(@wonderwhy-er\/desktop-commander(@[^\/\s]+)?)/);
-      if (match) {
-        return match[1];
-      }
-    }
-  }
-  
-  // Fallback to @latest if we can't detect
-  return '@wonderwhy-er/desktop-commander@latest';
+  // Kilnshell is installed from its GitHub repository: npx -y github:Soflutionltd/kilnshell
+  return versionArg ? `github:Soflutionltd/kilnshell#${versionArg}` : 'github:Soflutionltd/kilnshell';
 }
 
 function isNPX() {
@@ -614,7 +592,7 @@ async function restartClaude() {
             }
             
             logToFile("\n✅ Installation successfully completed! Thank you for using Desktop Commander!\n");
-            logToFile('\nThe server is available as "desktop-commander" in Claude\'s MCP server list');
+            logToFile('\nThe server is available as "kilnshell" in Claude\'s MCP server list');
             
             logToFile("Future updates will install automatically — no need to run this setup again.\n\n");
             logToFile("🤔 Need help or have feedback? Happy to jump on a quick call: \n\n")
@@ -871,8 +849,8 @@ export default async function setup() {
                 await trackEvent('npx_setup_remove_old_config');
             }
 
-            // Add or update the terminal server config with the proper name "desktop-commander"
-            config.mcpServers["desktop-commander"] = serverConfig;
+            // Add or update the server config under the name "kilnshell"
+            config.mcpServers["kilnshell"] = serverConfig;
 
             // Write the updated config back
             writeFileSync(claudeConfigPath, JSON.stringify(config, null, 2), 'utf8');
@@ -888,7 +866,7 @@ export default async function setup() {
         logToFile(`Configuration location: ${claudeConfigPath}`);
 
         if (debugMode) {
-            logToFile('\nTo use the debug server:\n1. Restart Claude if it\'s currently running\n2. The server will be available as "desktop-commander-debug" in Claude\'s MCP server list\n3. Connect your debugger to port 9229');
+            logToFile('\nTo use the debug server:\n1. Restart Claude if it\'s currently running\n2. The server will be available as "kilnshell-debug" in Claude\'s MCP server list\n3. Connect your debugger to port 9229');
         }
 
         // Try to restart Claude

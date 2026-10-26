@@ -586,8 +586,8 @@ async function removeDesktopCommanderConfig() {
         // Track what we're removing
         const serversToRemove = [];
         
-        if (config.mcpServers["desktop-commander"]) {
-            serversToRemove.push("desktop-commander");
+        if (config.mcpServers["kilnshell"]) {
+            serversToRemove.push("kilnshell");
         }
 
         if (serversToRemove.length === 0) {
@@ -691,7 +691,7 @@ export default async function uninstall() {
             logToFile('The MCP server has been removed from Claude\'s configuration.');
 
             logToFile('\nIf you want to reinstall later, you can run:');
-            logToFile('npx @wonderwhy-er/desktop-commander@latest setup');
+            logToFile('npx -y github:Soflutionltd/kilnshell kilnshell-setup');
 
             logToFile('\nThank you for using Desktop Commander! 👋\n');
             

@@ -190,7 +190,13 @@ class UsageTracker {
   /**
    * Check if user should be prompted for feedback based on usage patterns
    */
+  /** Kilnshell never injects feedback requests into tool results. */
   async shouldPromptForFeedback(): Promise<boolean> {
+    return false;
+  }
+
+  /** Upstream Desktop Commander logic, kept for reference and unused in Kilnshell. */
+  private async upstreamShouldPromptForFeedback(): Promise<boolean> {
     // Check feature flag first
     const { featureFlagManager } = await import('./feature-flags.js');
     const feedbackEnabled = featureFlagManager.get('user_surveys', false);

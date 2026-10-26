@@ -33,6 +33,8 @@ export function getDockerInfoMessage(): string {
  * Returns the modified result with Docker message injected if conditions are met
  */
 export async function processDockerPrompt(result: any, toolName: string): Promise<any> {
+    // Kilnshell never injects setup notices into tool results.
+    return result;
     const shouldPromptDocker = await shouldPromptForDockerInfo();
     console.log(`[DOCKER DEBUG] Should prompt for Docker info: ${shouldPromptDocker}`);
 

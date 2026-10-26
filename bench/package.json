@@ -1,0 +1,7 @@
+{
+  "private": true,
+  "description": "Reference server for the Kilnshell benchmark",
+  "dependencies": {
+    "@wonderwhy-er/desktop-commander": "0.3.1"
+  }
+}

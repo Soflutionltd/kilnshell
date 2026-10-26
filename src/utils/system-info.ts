@@ -662,7 +662,7 @@ export function getOSSpecificGuidance(systemInfo: SystemInfo): string {
 
         if (docker.containerType === 'kubernetes') {
             guidance += `
-This Desktop Commander instance is running inside a Kubernetes pod.`;
+This Kilnshell instance is running inside a Kubernetes pod.`;
             
             // Add Kubernetes-specific info
             if (docker.containerEnvironment?.kubernetesNamespace) {
@@ -679,7 +679,7 @@ Node: ${docker.containerEnvironment.kubernetesNode}`;
             }
         } else if (docker.containerType === 'docker') {
             guidance += `
-This Desktop Commander instance is running inside a Docker container.`;
+This Kilnshell instance is running inside a Docker container.`;
             
             if (docker.orchestrator === 'docker-compose') {
                 guidance += ` (Docker Compose)`;
@@ -688,7 +688,7 @@ This Desktop Commander instance is running inside a Docker container.`;
             }
         } else {
             guidance += `
-This Desktop Commander instance is running inside a ${docker.containerType || 'container'} environment.`;
+This Kilnshell instance is running inside a ${docker.containerType || 'container'} environment.`;
         }
 
         if (docker.mountPoints.length > 0) {

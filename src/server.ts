@@ -34,9 +34,9 @@ const OS_GUIDANCE = getOSSpecificGuidance(SYSTEM_INFO);
 const DEV_TOOL_GUIDANCE = getDevelopmentToolGuidance(SYSTEM_INFO);
 const PATH_GUIDANCE = `${getPathGuidance(SYSTEM_INFO)} Relative paths depend on the current working directory, and tilde paths (~/...) may not resolve in every context. Absolute paths are generally the most reliable.`;
 
-const CMD_PREFIX_DESCRIPTION = `This command can be referenced as "DC: ..." or "use Desktop Commander to ..." in your instructions.`;
+const CMD_PREFIX_DESCRIPTION = `This command can be referenced as "KS: ..." or "use Kilnshell to ..." in your instructions.`;
 
-const SERVER_INSTRUCTIONS = `Desktop Commander provides tools for working with the user's authorized device.
+const SERVER_INSTRUCTIONS = `Kilnshell provides tools for working with the user's authorized device.
 - Filesystem tools handle direct file and directory operations within configured access boundaries.
 - Terminal process tools support shell commands, REPLs, and long-running processes. start_process creates a process session; interact_with_process sends input; read_process_output reads later output; force_terminate ends a session.
 - Search tools are session-based. start_search creates a search session; get_more_search_results reads its results; stop_search ends it early.
@@ -83,7 +83,7 @@ import { trackToolCall } from './utils/trackTools.js';
 import { usageTracker } from './utils/usageTracker.js';
 import { processDockerPrompt } from './utils/dockerPrompt.js';
 import { toolHistory } from './utils/toolHistory.js';
-import { handleWelcomePageOnboarding, skipWelcomePageOnboarding } from './utils/welcome-onboarding.js';
+import { skipWelcomePageOnboarding } from './utils/welcome-onboarding.js';
 
 import { VERSION } from './version.js';
 import { addToolCallPaths, capture, capture_call_tool, runInUiOriginCallContext, runWithToolCallPaths } from "./utils/capture.js";
@@ -114,7 +114,7 @@ deferLog('info', 'Loading server.ts');
 
 export const server = new Server(
     {
-        name: "desktop-commander",
+        name: "kilnshell",
         version: VERSION,
     },
     {
@@ -241,7 +241,8 @@ server.setRequestHandler(InitializeRequestSchema, async (request: InitializeRequ
                 && !(global as any).disableOnboarding;
 
             if (isWelcomePageEligibleClient) {
-                await handleWelcomePageOnboarding(currentClient.name);
+                // Kilnshell opens no welcome page in the browser.
+                await skipWelcomePageOnboarding();
             } else {
                 // Do not carry a first-run page over to a client that is made
                 // eligible in a later release.
@@ -282,7 +283,7 @@ server.setRequestHandler(InitializeRequestSchema, async (request: InitializeRequ
                 logging: {},
             },
             serverInfo: {
-                name: "desktop-commander",
+                name: "kilnshell",
                 version: VERSION,
             },
             instructions: SERVER_INSTRUCTIONS,
@@ -302,6 +303,8 @@ deferLog('info', 'Setting up request handlers...');
  * Check if a tool should be included based on current client
  */
 function shouldIncludeTool(toolName: string): boolean {
+    // The upstream feedback form belongs to the Desktop Commander project, not to Kilnshell.
+    if (toolName === 'give_feedback_to_desktop_commander') return false;
     // Exclude these tools for desktop-commander client (DC-specific meta-tools not useful when DC itself is the client)
     if (currentClient?.name === 'desktop-commander-app') {
         if (toolName === 'give_feedback_to_desktop_commander') {

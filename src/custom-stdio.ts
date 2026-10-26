@@ -105,7 +105,7 @@ export class FilteredStdioServerTransport extends StdioServerTransport {
         this.clientName.includes('vscode') ||
         this.clientName === 'claude-dev') {
       this.disableNotifications = true;
-      process.stderr.write(`[INFO] Desktop Commander: Notifications disabled for ${clientName}\n`);
+      process.stderr.write(`[INFO] Kilnshell: Notifications disabled for ${clientName}\n`);
     }
   }
 
@@ -253,7 +253,7 @@ export class FilteredStdioServerTransport extends StdioServerTransport {
         method: "notifications/message",
         params: {
           level: level,
-          logger: "desktop-commander",
+          logger: "kilnshell",
           data: data
         }
       };
@@ -267,7 +267,7 @@ export class FilteredStdioServerTransport extends StdioServerTransport {
         method: "notifications/message",
         params: {
           level: "error",
-          logger: "desktop-commander",
+          logger: "kilnshell",
           data: `Log serialization failed: ${args.join(' ')}`
         }
       };
@@ -302,7 +302,7 @@ export class FilteredStdioServerTransport extends StdioServerTransport {
         method: "notifications/message",
         params: {
           level: level,
-          logger: "desktop-commander",
+          logger: "kilnshell",
           data: data ? { message, ...data } : message
         }
       };
@@ -315,7 +315,7 @@ export class FilteredStdioServerTransport extends StdioServerTransport {
         method: "notifications/message",
         params: {
           level: "error",
-          logger: "desktop-commander",
+          logger: "kilnshell",
           data: `sendLog failed: ${message}`
         }
       };
@@ -351,7 +351,7 @@ export class FilteredStdioServerTransport extends StdioServerTransport {
         method: "notifications/message",
         params: {
           level: "info",
-          logger: "desktop-commander",
+          logger: "kilnshell",
           data: `Progress ${token}: ${value}${total ? `/${total}` : ''}`
         }
       };
@@ -383,7 +383,7 @@ export class FilteredStdioServerTransport extends StdioServerTransport {
         method: "notifications/message",
         params: {
           level: "error",
-          logger: "desktop-commander",
+          logger: "kilnshell",
           data: `Custom notification failed: ${method}: ${JSON.stringify(params)}`
         }
       };
