@@ -29,8 +29,8 @@ class FeatureFlagManager {
     
     // Use production flags (v2 supports weighted variants)
     // Kilnshell does not download remote feature flags: it runs on the built-in defaults,
-    // unless KILNSHELL_FLAG_URL points to a flags file you host yourself.
-    this.flagUrl = process.env.KILNSHELL_FLAG_URL || '';
+    // unless KILNSHELL_FLAG_URL (or the upstream DC_FLAG_URL) points to a flags file you host yourself.
+    this.flagUrl = process.env.KILNSHELL_FLAG_URL || process.env.DC_FLAG_URL || '';
     
     // Set up promise for waiting on fresh fetch
     this.freshFetchPromise = new Promise((resolve) => {

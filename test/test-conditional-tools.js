@@ -37,10 +37,11 @@ async function testConditionalTools() {
     console.log(`   Has give_feedback_to_desktop_commander: ${hasFeedbackRegular}`);
     console.log(`   Has get_prompts: ${hasGetPromptsRegular}`);
 
-    if (hasFeedbackRegular) {
-        console.log('   ✅ PASS: Feedback tool is included for regular client');
+    // Kilnshell hides the upstream feedback tool for every client.
+    if (!hasFeedbackRegular) {
+        console.log('   ✅ PASS: Feedback tool is hidden for regular client');
     } else {
-        console.log('   ❌ FAIL: Feedback tool should be included for regular client');
+        console.log('   ❌ FAIL: Feedback tool should be hidden in Kilnshell');
         exitProcess(1);
         return;
     }
