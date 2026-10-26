@@ -1,4 +1,7 @@
+import { configManager } from './config-manager.js';
 import path from 'path';
+import { loginEnvCacheEnabled, loginEnvironment } from './utils/login-env.js';
+import { getDefaultShell, getShellSpawnArgs } from './utils/shell.js';
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
 import {
     CallToolRequestSchema,
@@ -18,6 +21,15 @@ import { getSystemInfo, getOSSpecificGuidance, getPathGuidance, getDevelopmentTo
 
 // Get system information once at startup
 const SYSTEM_INFO = getSystemInfo();
+
+// Resolve the login-shell environment in the background at startup, so even the first command
+// skips re-reading the user's shell profile (see utils/login-env.ts).
+if (loginEnvCacheEnabled()) {
+    void configManager.getValue('defaultShell').then((configured) => {
+        const spawn = getShellSpawnArgs(configured || getDefaultShell(), 'true');
+        if (spawn.args[0] === '-l') void loginEnvironment(spawn.executable);
+    }).catch(() => {});
+}
 const OS_GUIDANCE = getOSSpecificGuidance(SYSTEM_INFO);
 const DEV_TOOL_GUIDANCE = getDevelopmentToolGuidance(SYSTEM_INFO);
 const PATH_GUIDANCE = `${getPathGuidance(SYSTEM_INFO)} Relative paths depend on the current working directory, and tilde paths (~/...) may not resolve in every context. Absolute paths are generally the most reliable.`;
@@ -1446,19 +1458,14 @@ async function handleCallToolRequest(request: CallToolRequest): Promise<ServerRe
 
         if (result.isError) {
             await usageTracker.trackFailure(name);
-            console.log(`[FEEDBACK DEBUG] Tool ${name} failed, not checking feedback`);
         } else {
             await usageTracker.trackSuccess(name);
-            console.log(`[FEEDBACK DEBUG] Tool ${name} succeeded, checking feedback...`);
 
             // Check if should prompt for feedback (only on successful operations)
             const shouldPrompt = await usageTracker.shouldPromptForFeedback();
-            console.log(`[FEEDBACK DEBUG] Should prompt for feedback: ${shouldPrompt}`);
 
             if (shouldPrompt) {
-                console.log(`[FEEDBACK DEBUG] Generating feedback message...`);
                 const feedbackResult = await usageTracker.getFeedbackPromptMessage();
-                console.log(`[FEEDBACK DEBUG] Generated variant: ${feedbackResult.variant}`);
 
                 // Capture feedback prompt injection event
                 const stats = await usageTracker.getStats();

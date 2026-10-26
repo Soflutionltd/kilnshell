@@ -5,6 +5,7 @@ import { configManager, type ServerConfig } from './config-manager.js';
 import {capture} from "./utils/capture.js";
 import { analyzeProcessState, STATE_DETECTION_TAIL_CHARS, type ProcessState } from './utils/process-detection.js';
 import { getCommandEnvironment, getDefaultShell, getShellSpawnArgs, type ShellSpawnConfig } from './utils/shell.js';
+import { loginEnvironment } from './utils/login-env.js';
 import { terminateProcessTree } from './utils/process-tree.js';
 
 /** A child process's output pipes. */
@@ -165,10 +166,20 @@ export class TerminalManager {
     }
 
     // Get the appropriate spawn configuration for the shell, with login flags where appropriate
-    const spawnConfig: ShellSpawnConfig = getShellSpawnArgs(shellToUse, enhancedCommand);
+    let spawnConfig: ShellSpawnConfig = getShellSpawnArgs(shellToUse, enhancedCommand);
+    let baseEnv = getCommandEnvironment();  // PATHEXT and ProgramData repaired on Windows
+    // Login shells (bash, zsh, fish): reuse the environment their profile produced once, instead of
+    // re-reading the profile for every command (see utils/login-env.ts).
+    if (spawnConfig.args[0] === '-l' && spawnConfig.args[1] === '-c') {
+      const loginEnv = await loginEnvironment(spawnConfig.executable);
+      if (loginEnv) {
+        spawnConfig = { ...spawnConfig, args: spawnConfig.args.slice(1) };
+        baseEnv = loginEnv;
+      }
+    }
     const spawnOptions: any = {
       env: {
-        ...getCommandEnvironment(),  // PATHEXT and ProgramData repaired on Windows
+        ...baseEnv,
         TERM: 'xterm-256color'  // Better terminal compatibility
       },
       windowsHide: true  // Prevent visible console windows on Windows

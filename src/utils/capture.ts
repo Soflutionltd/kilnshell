@@ -590,6 +590,8 @@ export const capture = async (event: string, properties?: any) => {
     }
     void (async () => {
         try {
+            // Opted out in the config: skip building the event entirely (it reads system info and paths).
+            if (isTelemetryDisabledValue(await configManager.getValue('telemetryEnabled'))) return;
             const eventProperties = await buildEventProperties(properties);
             await sendToTelemetryProxy(event, eventProperties);
         } catch {

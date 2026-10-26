@@ -506,7 +506,16 @@ function detectPythonInfo(): SystemInfo['pythonInfo'] {
 /**
  * Get comprehensive system information for tool prompts
  */
+// System facts (OS, shell, container, Python) do not change while the server runs, and detecting
+// them spawns processes synchronously. Telemetry asked for them on every tool call, which blocked
+// the event loop for 10 to 25 ms each time, so they are computed once per process.
+let cachedSystemInfo: SystemInfo | undefined;
+
 export function getSystemInfo(): SystemInfo {
+    return (cachedSystemInfo ??= computeSystemInfo());
+}
+
+function computeSystemInfo(): SystemInfo {
     const platform = os.platform();
     const isWindows = platform === 'win32';
     const isMacOS = platform === 'darwin';
