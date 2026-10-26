@@ -1,0 +1,56 @@
+{
+  "manifest_version": "0.3",
+  "name": "kilnshell",
+  "display_name": "Kilnshell",
+  "version": "0.0.0",
+  "description": "Fast, telemetry-free local MCP: shell, files, search, processes, PDF, Excel and Word for agents.",
+  "long_description": "Kilnshell gives an AI agent your terminal and your files: run commands and long-lived processes, read, write and surgically edit files, search code and contents with ripgrep, and work with PDF, Excel and Word documents. A performance-focused, telemetry-free clone of Desktop Commander: commands start up to 100x faster because the login shell environment is resolved once, and nothing is ever sent anywhere.",
+  "author": {
+    "name": "Soflution Ltd",
+    "email": "contact@soflution.com",
+    "url": "https://github.com/Soflutionltd"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Soflutionltd/kilnshell.git"
+  },
+  "homepage": "https://github.com/Soflutionltd/kilnshell",
+  "support": "https://github.com/Soflutionltd/kilnshell/issues",
+  "license": "MIT",
+  "keywords": [
+    "terminal",
+    "shell",
+    "files",
+    "search",
+    "ripgrep",
+    "processes",
+    "pdf",
+    "excel",
+    "docx",
+    "automation"
+  ],
+  "server": {
+    "type": "node",
+    "entry_point": "dist/index.js",
+    "mcp_config": {
+      "command": "node",
+      "args": [
+        "${__dirname}/dist/index.js"
+      ],
+      "env": {
+        "MCP_DXT": "true",
+        "NODE_ENV": "production"
+      }
+    }
+  },
+  "compatibility": {
+    "platforms": [
+      "darwin",
+      "win32",
+      "linux"
+    ],
+    "runtimes": {
+      "node": ">=18.0.0"
+    }
+  }
+}

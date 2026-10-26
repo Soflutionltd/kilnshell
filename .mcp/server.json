@@ -1,0 +1,22 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.Soflutionltd/kilnshell",
+  "title": "Kilnshell",
+  "description": "Fast, telemetry-free local MCP: shell, files, search, processes, PDF, Excel and Word for agents.",
+  "version": "0.0.0",
+  "websiteUrl": "https://github.com/Soflutionltd/kilnshell",
+  "repository": {
+    "url": "https://github.com/Soflutionltd/kilnshell",
+    "source": "github"
+  },
+  "packages": [
+    {
+      "registryType": "mcpb",
+      "identifier": "https://github.com/Soflutionltd/kilnshell/releases/download/TAG/kilnshell.mcpb",
+      "fileSha256": "0000000000000000000000000000000000000000000000000000000000000000",
+      "transport": {
+        "type": "stdio"
+      }
+    }
+  ]
+}
