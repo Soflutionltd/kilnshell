@@ -1,6 +1,6 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
-  "name": "io.github.Soflutionltd/kilnshell",
+  "name": "com.soflution/kilnshell",
   "title": "Kilnshell",
   "description": "Fast, telemetry-free local MCP: shell, files, search, processes, PDF, Excel and Word for agents.",
   "version": "0.0.0",
@@ -17,15 +17,6 @@
       "transport": {
         "type": "stdio"
       }
-    }
-  ],
-  "icons": [
-    {
-      "src": "https://raw.githubusercontent.com/Soflutionltd/kilnshell/main/docs/icon.png",
-      "mimeType": "image/png",
-      "sizes": [
-        "512x512"
-      ]
     }
   ]
 }
