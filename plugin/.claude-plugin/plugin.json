@@ -1,0 +1,24 @@
+{
+  "name": "kilnshell",
+  "displayName": "Kilnshell",
+  "description": "Fast, telemetry-free local MCP server: shell, files, search, processes, PDF, Excel and Word for Claude.",
+  "version": "1.0.2",
+  "author": {
+    "name": "Soflution Ltd",
+    "email": "contact@soflution.com",
+    "url": "https://github.com/Soflutionltd"
+  },
+  "homepage": "https://github.com/Soflutionltd/kilnshell",
+  "repository": "https://github.com/Soflutionltd/kilnshell",
+  "license": "MIT",
+  "keywords": [
+    "terminal",
+    "shell",
+    "files",
+    "search",
+    "processes",
+    "pdf",
+    "excel",
+    "docx"
+  ]
+}

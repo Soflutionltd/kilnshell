@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "kilnshell": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "kilnshell@1.0.2"
+      ]
+    }
+  }
+}

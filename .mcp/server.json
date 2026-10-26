@@ -18,5 +18,14 @@
         "type": "stdio"
       }
     }
+  ],
+  "icons": [
+    {
+      "src": "https://raw.githubusercontent.com/Soflutionltd/kilnshell/main/docs/icon.png",
+      "mimeType": "image/png",
+      "sizes": [
+        "512x512"
+      ]
+    }
   ]
 }
