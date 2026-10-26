@@ -43,8 +43,8 @@ export default async function runTests() {
 
     const overLimit = await write('over-limit.txt', numbered(limit + 1).join('\n') + '\n');
     check(
-      overLimit.includes(`(${limit + 1} lines)`) && overLimit.includes('Performance tip'),
-      `${limit + 1} lines ending in a newline: "(${limit + 1} lines)" and the performance note, got ${JSON.stringify(overLimit.slice(0, 90))}`
+      overLimit.includes(`(${limit + 1} lines)`) && !overLimit.includes('Performance tip'),
+      `${limit + 1} lines ending in a newline: "(${limit + 1} lines)" and no performance note either (removed in 1.0.4), got ${JSON.stringify(overLimit.slice(0, 90))}`
     );
 
     const breaks = await write('breaks.txt', 'lf\ncrlf\r\ncr\rlast');

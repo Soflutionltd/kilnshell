@@ -40,6 +40,8 @@ export const ReadProcessOutputArgsSchema = z.object({
   offset: z.number().optional(),   // Line offset: 0=from last read, positive=absolute, negative=tail
   length: z.number().optional(),   // Max lines to return (default from config.fileReadLineLimit)
   verbose_timing: z.boolean().optional(),
+  // Wait until the process exits (or timeout_ms) and return all its output in one read
+  wait_for_exit: z.boolean().optional(),
 });
 
 export const ForceTerminateArgsSchema = z.object({
@@ -213,6 +215,7 @@ export const StartSearchArgsSchema = z.object({
   timeout_ms: wholeNumber('timeout_ms', 0).optional(), // Match process naming convention; 0: no time limit
   earlyTermination: z.boolean().optional(), // Stop search early when exact filename match is found (default: true for files, false for content)
   literalSearch: z.boolean().optional().default(false), // Force literal string matching (-F flag) instead of regex
+  wait: z.boolean().optional(), // Wait for the search to finish (or timeout_ms) and return every result at once
   // 'ui' marks widget-fired calls (e.g. markdown link-target search);
   // excluded from tool-call telemetry (see isUiOriginCall in server.ts).
   origin: z.enum(['ui', 'llm']).optional(),
@@ -248,7 +251,27 @@ export const TrackUiEventArgsSchema = z.object({
  * about parameters a caller sent that the tool does not support. Keep in sync
  * with the tool definitions in server.ts.
  */
+export const BatchArgsSchema = z.object({
+  calls: z.array(z.object({
+    tool: z.string(),
+    arguments: z.record(z.any()).optional(),
+  })).min(1).max(50),
+  stop_on_error: z.boolean().optional(),
+});
+
+export const WaitForArgsSchema = z.object({
+  port: z.number().int().min(1).max(65535).optional(),
+  host: z.string().optional(),
+  path: z.string().optional(),
+  url: z.string().optional(),
+  pid: z.number().optional(),
+  gone: z.boolean().optional(), // true: wait until the file or port disappears
+  timeout_ms: z.number().optional(),
+});
+
 export const toolArgSchemas: Record<string, z.ZodTypeAny> = {
+  batch: BatchArgsSchema,
+  wait_for: WaitForArgsSchema,
   get_config: GetConfigArgsSchema,
   set_config_value: SetConfigValueArgsSchema,
   read_file: ReadFileArgsSchema,

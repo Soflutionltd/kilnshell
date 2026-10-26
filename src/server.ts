@@ -69,8 +69,11 @@ import {
     ListSearchesArgsSchema,
     GetRecentToolCallsArgsSchema,
     WritePdfArgsSchema,
+    BatchArgsSchema,
+    WaitForArgsSchema,
     toolArgSchemas,
 } from './tools/schemas.js';
+import { handleWaitFor } from './handlers/wait-handlers.js';
 import {
     detectUnsupportedParams,
     getSupportedParams,
@@ -1077,6 +1080,39 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
                 },
             },
             {
+                name: "batch",
+                description: `
+                        Run several Kilnshell tools in ONE call, in order, and get every result back together.
+                        Each call is {tool, arguments}, exactly as if it were called on its own. Use it to chain
+                        reads, edits, commands and searches: one round trip instead of one per step.
+                        stop_on_error stops at the first failing call (default: run them all). Up to 50 calls.
+
+                        ${CMD_PREFIX_DESCRIPTION}`,
+                inputSchema: zodToJsonSchema(BatchArgsSchema),
+                annotations: {
+                    title: "Batch",
+                    readOnlyHint: false,
+                    destructiveHint: true,
+                    openWorldHint: true,
+                },
+            },
+            {
+                name: "wait_for",
+                description: `
+                        Wait until a condition holds instead of polling: a TCP port accepts connections (port, host),
+                        a file exists (path), a URL answers (url), or a process started with start_process exits (pid).
+                        gone=true waits for the port or file to disappear. timeout_ms defaults to 30000.
+
+                        ${CMD_PREFIX_DESCRIPTION}`,
+                inputSchema: zodToJsonSchema(WaitForArgsSchema),
+                annotations: {
+                    title: "Wait For",
+                    readOnlyHint: true,
+                    destructiveHint: false,
+                    openWorldHint: true,
+                },
+            },
+            {
                 name: "kill_process",
                 description: `
                         Terminate a running process by PID.
@@ -1215,6 +1251,39 @@ function pathArguments(args: unknown): unknown[] {
     return Object.entries(args)
         .filter(([key]) => /path/i.test(key) || key === 'source' || key === 'destination' || key === 'shell')
         .map(([, value]) => value);
+}
+
+/**
+ * batch: several tool calls in one request, run in order through the same handler as single
+ * calls (same checks, history and allowed directories). Results come back numbered.
+ */
+async function handleBatch(args: unknown): Promise<ServerResult> {
+    const parsed = BatchArgsSchema.safeParse(args);
+    if (!parsed.success) {
+        return { content: [{ type: "text", text: `Invalid arguments for batch: ${parsed.error}` }], isError: true };
+    }
+    const content: any[] = [];
+    let failed = 0;
+    const calls = parsed.data.calls;
+    for (let i = 0; i < calls.length; i++) {
+        const { tool, arguments: callArgs = {} } = calls[i];
+        if (tool === 'batch') {
+            content.push({ type: "text", text: `[${i + 1}] ${tool}: a batch cannot contain another batch` });
+            failed++;
+            continue;
+        }
+        const started = Date.now();
+        const res: any = await handleCallToolRequest({ method: 'tools/call', params: { name: tool, arguments: callArgs } } as CallToolRequest);
+        const error = !!res?.isError;
+        if (error) failed++;
+        content.push({ type: "text", text: `[${i + 1}] ${tool}${error ? ' (error)' : ''} · ${Date.now() - started} ms` });
+        for (const item of res?.content ?? []) content.push(item);
+        if (error && parsed.data.stop_on_error) {
+            content.push({ type: "text", text: `Stopped after call ${i + 1} (stop_on_error); ${calls.length - i - 1} call(s) not run.` });
+            break;
+        }
+    }
+    return { content, isError: failed > 0 && failed === calls.length };
 }
 
 async function handleCallToolRequest(request: CallToolRequest): Promise<ServerResult> {
@@ -1429,6 +1498,14 @@ async function handleCallToolRequest(request: CallToolRequest): Promise<ServerRe
 
             case "edit_block":
                 result = stillLoading(args?.file_path, 'edit') ?? await handlers.handleEditBlock(args);
+                break;
+
+            case "batch":
+                result = await handleBatch(args);
+                break;
+
+            case "wait_for":
+                result = await handleWaitFor(args);
                 break;
 
             default:

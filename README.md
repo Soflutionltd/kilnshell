@@ -52,6 +52,12 @@ Kilnshell started as a clone of [Desktop Commander](https://github.com/wonderwhy
 2. **No process is spawned behind your back on every call.** Telemetry rebuilt its system report for each tool call, which ran `python3 --version` synchronously and froze the server for 10 to 25 ms, even with telemetry turned off. System facts are now computed once.
 3. **Line counting uses native string scanning.** Reading, editing and inspecting a file counted its lines character by character; the new count gives identical results (checked on 200,000 random inputs) about 11x faster on large files.
 4. **No debug chatter.** Every call used to push two to four `[FEEDBACK DEBUG]` log notifications to the client.
+5. **Fewer round trips.** For an agent, each tool call costs a full round trip, often far more than the command itself. Kilnshell adds:
+   - `batch`: several tool calls (commands, reads, edits, searches) in one request, results numbered in order;
+   - `read_process_output` with `wait_for_exit: true`: waits for the process to end and returns all its output at once, instead of polling;
+   - `start_search` with `wait: true`: returns every result in one call, instead of `start_search` then `get_more_search_results`;
+   - `wait_for`: waits until a port accepts connections, a file exists, a URL answers or a process exits, instead of sleep loops.
+6. **Works at full speed inside Claude Desktop.** Claude Desktop runs extensions in its own Node; the environment is captured with `env -0`, so the profile cache works there too, and Claude's `ELECTRON_*` variables never reach your commands.
 
 ## What was removed
 
@@ -64,11 +70,17 @@ Kilnshell started as a clone of [Desktop Commander](https://github.com/wonderwhy
 | `give_feedback_to_desktop_commander` tool | Hidden. |
 | `remote` mode (relies on the Desktop Commander cloud service) | Not available. |
 
-Everything else is the same code: the same tools, the same arguments, the same config file (`~/.claude-server-commander/config.json`), so Kilnshell is a drop-in replacement.
+Everything else is the same code: the same tools, the same arguments, the same config file (`~/.claude-server-commander/config.json`), so Kilnshell is a drop-in replacement. The new tools and options are additions only.
 
 ## Install
 
-Claude Desktop, Claude Code, Cursor or any MCP client:
+**Claude Desktop:** download [`kilnshell.mcpb`](https://github.com/Soflutionltd/kilnshell/releases/latest/download/kilnshell.mcpb) and double-click it (or Settings > Extensions > Advanced settings > Install Extension). The Kilnshell icon then shows next to every tool call.
+
+**Claude Code:** `/plugin install kilnshell --marketplace Soflutionltd/kilnshell`
+
+Also listed in the official [MCP Registry](https://registry.modelcontextprotocol.io/v0/servers?search=com.soflution/kilnshell) as `com.soflution/kilnshell`.
+
+Cursor or any MCP client:
 
 ```json
 {
@@ -95,9 +107,10 @@ git clone https://github.com/Soflutionltd/kilnshell && cd kilnshell && npm insta
 
 | Area | Tools |
 |---|---|
-| Terminal | `start_process`, `interact_with_process`, `read_process_output`, `list_sessions`, `list_processes`, `force_terminate`, `kill_process` |
+| Speed | `batch` (several calls in one), `wait_for` (port, file, URL, process) |
+| Terminal | `start_process`, `interact_with_process`, `read_process_output` (`wait_for_exit`), `list_sessions`, `list_processes`, `force_terminate`, `kill_process` |
 | Files | `read_file`, `read_multiple_files`, `write_file`, `edit_block`, `create_directory`, `list_directory`, `move_file`, `get_file_info` |
-| Search | `start_search`, `get_more_search_results`, `stop_search`, `list_searches` (ripgrep) |
+| Search | `start_search` (`wait`), `get_more_search_results`, `stop_search`, `list_searches` (ripgrep) |
 | Documents | `write_pdf`, plus reading and editing PDF, Excel and Word files through `read_file`, `write_file` and `edit_block` |
 | Config | `get_config`, `set_config_value`, `get_usage_stats`, `get_recent_tool_calls` |
 

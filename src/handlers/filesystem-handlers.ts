@@ -347,9 +347,7 @@ export async function handleWriteFile(args: unknown): Promise<ServerResult> {
         const lineCount = TextFileHandler.countLines(parsed.content);
         let errorMessage = "";
         if (lineCount > MAX_LINES) {
-            errorMessage = `✅ File written successfully! (${lineCount} lines)
-            
-💡 Performance tip: For optimal speed, consider chunking files into ≤30 line pieces in future operations.`;
+            errorMessage = "";
         }
 
         // Pass the mode parameter to writeFile

@@ -329,7 +329,8 @@ export async function readProcessOutput(args: unknown, maxWaitMs: number = MAX_P
     timeout_ms = 5000, 
     offset = 0,                    // 0 = from last read, positive = absolute, negative = tail
     length = defaultLength,        // Default from config, same as file reading
-    verbose_timing = false 
+    verbose_timing = false,
+    wait_for_exit = false,
   } = parsed.data;
 
   // Timing telemetry
@@ -342,8 +343,8 @@ export async function readProcessOutput(args: unknown, maxWaitMs: number = MAX_P
     // Wait for new output to arrive (only for "new output" reads, not absolute/tail)
     const waitForOutput = (): Promise<void> => {
       return new Promise((resolve) => {
-        // Check if there's already new output
-        if (terminalManager.hasUnreadOutput(pid)) {
+        // Check if there's already new output (with wait_for_exit, only the exit ends the wait)
+        if (!wait_for_exit && terminalManager.hasUnreadOutput(pid)) {
           resolve();
           return;
         }
@@ -367,7 +368,7 @@ export async function readProcessOutput(args: unknown, maxWaitMs: number = MAX_P
         // Poll for new output, or for the exit (the session is then no
         // longer active): a process that exited writes nothing more itself
         interval = setInterval(() => {
-          if (terminalManager.hasUnreadOutput(pid) || !terminalManager.getSession(pid)) {
+          if ((!wait_for_exit && terminalManager.hasUnreadOutput(pid)) || !terminalManager.getSession(pid)) {
             resolveOnce();
           }
         }, 50);

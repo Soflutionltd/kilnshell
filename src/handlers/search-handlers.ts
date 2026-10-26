@@ -35,6 +35,16 @@ export async function handleStartSearch(args: unknown): Promise<ServerResult> {
       literalSearch: parsed.data.literalSearch,
     });
 
+    if (parsed.data.wait) {
+      // One call instead of start_search + get_more_search_results polling
+      const limitMs = parsed.data.timeout_ms && parsed.data.timeout_ms > 0 ? parsed.data.timeout_ms : 30000;
+      const until = Date.now() + limitMs;
+      while (Date.now() < until && !searchManager.readSearchResults(result.sessionId, 0, 1).isComplete) {
+        await new Promise((r) => setTimeout(r, 25));
+      }
+      const page = searchManager.readSearchResults(result.sessionId, 0, parsed.data.maxResults || 1000);
+      return searchResultsAnswer(page, 0);
+    }
     return startSearchAnswer(result, parsed.data);
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
