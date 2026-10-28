@@ -1,6 +1,6 @@
 {
   "name": "kilnshell",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "The fastest local machine MCP server: shell, files, search, processes, PDF, Excel and Word for AI agents. A performance-focused, telemetry-free clone of Desktop Commander.",
   "license": "MIT",
   "author": "Soflution Ltd",
@@ -9,19 +9,22 @@
     "type": "git",
     "url": "git+https://github.com/Soflutionltd/kilnshell.git"
   },
-  "bugs": "https://github.com/Soflutionltd/kilnshell/issues",
+  "bugs": {
+    "url": "https://github.com/Soflutionltd/kilnshell/issues"
+  },
   "type": "module",
   "engines": {
     "node": ">=22.12.0"
   },
   "bin": {
-    "kilnshell": "dist/index.js",
+    "kilnshell": "bin/supervise.cjs",
     "kilnshell-setup": "dist/setup-claude-server.js",
     "kilnshell-remove": "dist/uninstall-claude-server.js"
   },
   "files": [
     "dist",
-    "vendor/telemetry-contract"
+    "vendor/telemetry-contract",
+    "bin"
   ],
   "scripts": {
     "postinstall": "node dist/npm-scripts/verify-ripgrep.js || node -e \"process.exit(0)\"",

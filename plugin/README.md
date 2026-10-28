@@ -16,7 +16,7 @@ In Claude Desktop, download `kilnshell.mcpb` from the [latest release](https://g
 
 ## What it runs
 
-The plugin starts one local MCP server over stdio: the `kilnshell` npm package, pinned to version 1.0.4 (`npx -y kilnshell@1.0.4`). Its source code is in this repository.
+The plugin starts one local MCP server over stdio: the `kilnshell` npm package, always the latest version (`npx -y kilnshell@latest`), which then updates itself while it runs. Its source code is in this repository.
 
 ## What it sends and fetches
 

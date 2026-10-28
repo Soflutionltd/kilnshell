@@ -1,0 +1,11 @@
+{
+  "package": "kilnshell",
+  "server": "dist/index.js",
+  "passthrough": [
+    "setup",
+    "remove",
+    "remote",
+    "--version",
+    "--help"
+  ]
+}

@@ -4,7 +4,7 @@
       "command": "npx",
       "args": [
         "-y",
-        "kilnshell@1.0.4"
+        "kilnshell@latest"
       ]
     }
   }

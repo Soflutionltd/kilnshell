@@ -87,7 +87,7 @@ Cursor or any MCP client:
   "mcpServers": {
     "kilnshell": {
       "command": "npx",
-      "args": ["-y", "github:Soflutionltd/kilnshell"]
+      "args": ["-y", "kilnshell@latest"]
     }
   }
 }
@@ -100,8 +100,14 @@ git clone https://github.com/Soflutionltd/kilnshell && cd kilnshell && npm insta
 ```
 
 ```json
-{ "mcpServers": { "kilnshell": { "command": "node", "args": ["/absolute/path/to/kilnshell/dist/index.js"] } } }
+{ "mcpServers": { "kilnshell": { "command": "node", "args": ["/absolute/path/to/kilnshell/bin/supervise.cjs"] } } }
 ```
+
+### Automatic updates
+
+Every install below keeps itself up to date, without restarting Claude or Cursor. The MCP client talks to a small supervisor (`bin/supervise.cjs`) that stays connected while the server runs behind it. At start-up and every 6 hours it asks npm for the latest `kilnshell`, installs it in the background in `~/.soflution/mcp/kilnshell/`, and switches over as soon as no request is in flight (the client is told the tool list may have changed). A version that fails to start is rolled back at once and never picked again on that machine. npm checks the integrity of every download, and releases are published from GitHub Actions with provenance.
+
+The only network call is that version check to `registry.npmjs.org`; nothing about your machine or your use is sent. Turn it off with `NO_UPDATE_NOTIFIER=1` (or `SOFLUTION_AUTO_UPDATE=0`). Started directly with `node dist/...`, kilnshell does not update itself and only mentions a newer version in its first tool result.
 
 ## Tools
 

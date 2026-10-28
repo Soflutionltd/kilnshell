@@ -16,6 +16,8 @@ import { exitProcess } from './utils/exit-process.js';
 import { runRemote } from './npm-scripts/remote.js';
 import { ensureChromeAvailable } from './tools/pdf/markdown.js';
 import { preloadFileSupport } from './utils/files/index.js';
+import { attachUpdateNotice, startUpdateCheck } from './update-notice.js';
+import { VERSION } from './version.js';
 
 // Store messages to defer until after initialization
 const deferredMessages: Array<{ level: string, message: string }> = [];
@@ -146,6 +148,8 @@ async function runServer() {
       preloadFileSupport();
     };
 
+    attachUpdateNotice(transport);
+    startUpdateCheck('kilnshell', VERSION, 'https://github.com/Soflutionltd/kilnshell');
     await server.connect(transport);
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
